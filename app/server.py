@@ -43,7 +43,7 @@ def create_vector_store():
 
 @mcp.tool()
 def read_document(query: str):
-    """To read a personal document and return the answer based on the query."""
+    """To read a personal document and return the answer based on the query. query harus berupa pertanyaan."""
 
     system_prompt = PromptTemplate(
         input_variables=["context", "question"],

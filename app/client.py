@@ -46,6 +46,7 @@ class McpClient:
         return list_tools
 
     async def tool_execution(self, tool_name: str, query: str):
+        print(type(self.session))
         if not self.session:
             raise ValueError("Session not initialized. Call connect_to_server first.")
         result = await self.session.call_tool(tool_name, {"query": query})

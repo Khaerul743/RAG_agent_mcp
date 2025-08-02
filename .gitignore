@@ -1,2 +1,6 @@
 venv
 .env
+documents/personal.text
+personal.txt
+*.pyc
+__pycache__/

@@ -18,6 +18,8 @@ def load_documents():
     # Load documents from the specified directory
     current_dir = os.path.dirname(__file__)
     docs_dir = os.path.join(current_dir, "../documents")
+    if not docs_dir:
+        raise ValueError("Documents directory not found. Please check the path.")
     loader = DirectoryLoader(
         docs_dir,
         glob="**/*.txt",
@@ -30,7 +32,8 @@ def load_documents():
 def create_vector_store():
     docs = load_documents()
     text_splitter = CharacterTextSplitter(
-        chunk_size=os.getenv("CHUNK_SIZE"), chunk_overlap=os.getenv("CHUNK_OVERLAP")
+        chunk_size=int(os.getenv("CHUNK_SIZE")),
+        chunk_overlap=int(os.getenv("CHUNK_OVERLAP")),
     )
     split_docs = text_splitter.split_documents(docs)
     embeddings = OpenAIEmbeddings()
@@ -39,15 +42,18 @@ def create_vector_store():
 
 
 @mcp.tool()
-def read_document(query: str) -> str:
+def read_document(query: str):
     """To read a personal document and return the answer based on the query."""
 
     system_prompt = PromptTemplate(
-        input_variables=["question"],
+        input_variables=["context", "question"],
         template="""
     Kamu adalah asisten pribadi yang dirancang untuk membantu menjawab pertanyaan berdasarkan dokumen pribadi saya.
     Tugas utama Anda adalah memberikan informasi yang akurat dan relevan berdasarkan konteks dokumenyang telah disediakan. 
 
+    Berikut adalah isi dokumen:
+    {context}
+    -------
     Berikut pertanyaan yang harus Anda jawab:
     {question}
 

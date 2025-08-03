@@ -30,10 +30,10 @@ class McpClient:
 
         await self.session.initialize()
 
-        list_tools = await self.session.list_tools()
-        print("List tools in server:")
-        for tool in list_tools.tools:
-            print(f"- {tool.name} : {tool.description}")
+        # list_tools = await self.session.list_tools()
+        # print("List tools in server:")
+        # for tool in list_tools.tools:
+        #     print(f"- {tool.name} : {tool.description}")
 
     async def get_tools(self):
         if not self.session:
